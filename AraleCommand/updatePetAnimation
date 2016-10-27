@@ -1,0 +1,34 @@
+#! /bin/bash
+export PROJECT_DIR="/Users/liuyang/SVN/NewArale"
+export PRO_PET_ANI_DIR=${PROJECT_DIR}/Assets/res/RES/PVR_SD/Animation/pets
+export SVN_PET_ANI_DIR="/Users/liuyang/SVN/Arale/design/骨骼动画配置导出/Pet/导出"
+
+echo "update svn ..."
+cd ${SVN_PET_ANI_DIR}
+svn update --force
+
+copyAnimation(){
+	for subfile in $1/*
+	do
+		#echo $subfile
+		cp -R -f ${subfile} ${PRO_PET_ANI_DIR}
+	done
+}
+
+echo "update project ..."
+for file in ${SVN_PET_ANI_DIR}/*
+do
+	if [ -d $file ];
+		then
+		copyAnimation $file
+	fi
+done
+
+echo "delete space of exportjson files ..."
+cd ${PRO_PET_ANI_DIR}
+for file in ${PRO_PET_ANI_DIR}/*.ExportJson
+do
+	sed -i "" "s/[ ][ ]*/ /g" $file
+done
+
+echo "SUCCESS"

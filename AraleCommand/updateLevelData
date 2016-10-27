@@ -1,0 +1,19 @@
+#! /bin/bash
+export PROJECT_DIR="/Users/liuyang/SVN/NewArale"
+export PRO_LEVEL_DIR=${PROJECT_DIR}/Assets/src/DATA/LevelInfo
+export LEVEL_DATA_DIR="/Users/liuyang/SVN/Arale/design/关卡编辑器/AraleLevelDataLua"
+
+echo "update svn..."
+cd ${LEVEL_DATA_DIR}
+svn update --force
+
+
+echo "copy file of levels to project..."
+
+for file in ${LEVEL_DATA_DIR}/*.lua
+do
+    cp -R -f ${file} ${PRO_LEVEL_DIR}
+done
+
+
+echo "SUCCESS"

@@ -1,0 +1,57 @@
+#! /bin/bash
+export PROJECT_DIR="/Users/liuyang/SVN/NewArale"
+export PRO_DESIGN_DIR=${PROJECT_DIR}/Assets/src/DESIGN_CONFIG
+export PRO_LANGUAGE_DIR=${PROJECT_DIR}/Assets/src/Localization
+export SVN_DESIGN_DIR="/Users/liuyang/SVN/Arale/design/配置表"
+
+echo "update svn..."
+cd ${SVN_DESIGN_DIR}
+svn update --force
+
+
+echo "copy file of design to project..."
+
+cp -R -f ${SVN_DESIGN_DIR}/BaseConfig.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Function.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Recharge.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Shop.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Task.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/MessageType.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/messageTemplateVO.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Sign.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Mammon.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/New_Task.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Task_Day_reward.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Task_pools.lua ${PRO_DESIGN_DIR}/COMMON
+cp -R -f ${SVN_DESIGN_DIR}/Icon_contrast.lua ${PRO_DESIGN_DIR}/COMMON
+
+cp -R -f ${SVN_DESIGN_DIR}/Exp.lua ${PRO_DESIGN_DIR}/PETS
+cp -R -f ${SVN_DESIGN_DIR}/PetRisingStar.lua ${PRO_DESIGN_DIR}/PETS
+cp -R -f ${SVN_DESIGN_DIR}/PetPatch.lua ${PRO_DESIGN_DIR}/PETS
+cp -R -f ${SVN_DESIGN_DIR}/HatchBill.lua ${PRO_DESIGN_DIR}/PETS
+cp -R -f ${SVN_DESIGN_DIR}/Pets_config.lua ${PRO_DESIGN_DIR}/PETS
+
+cp -R -f ${SVN_DESIGN_DIR}/Monster.lua ${PRO_DESIGN_DIR}/PVE
+cp -R -f ${SVN_DESIGN_DIR}/StarReward.lua ${PRO_DESIGN_DIR}/PVE
+cp -R -f ${SVN_DESIGN_DIR}/StepGuide.lua ${PRO_DESIGN_DIR}/PVE
+cp -R -f ${SVN_DESIGN_DIR}/PVESkill.lua ${PRO_DESIGN_DIR}/PVE
+cp -R -f ${SVN_DESIGN_DIR}/Scene.lua ${PRO_DESIGN_DIR}/PVE
+cp -R -f ${SVN_DESIGN_DIR}/ElementConfig.lua ${PRO_DESIGN_DIR}/PVE
+cp -R -f ${SVN_DESIGN_DIR}/Element_Mapping.lua ${PRO_DESIGN_DIR}/PVE
+cp -R -f ${SVN_DESIGN_DIR}/MonsterSkill.lua ${PRO_DESIGN_DIR}/PVE
+
+cp -R -f ${SVN_DESIGN_DIR}/Item.lua ${PRO_DESIGN_DIR}/ITEM
+
+cp -R -f ${SVN_DESIGN_DIR}/DanGrading.lua ${PRO_DESIGN_DIR}/PVP
+cp -R -f ${SVN_DESIGN_DIR}/PVPExchange.lua ${PRO_DESIGN_DIR}/PVP
+cp -R -f ${SVN_DESIGN_DIR}/PVPSkill.lua ${PRO_DESIGN_DIR}/PVP
+cp -R -f ${SVN_DESIGN_DIR}/RankAward.lua ${PRO_DESIGN_DIR}/PVP
+cp -R -f ${SVN_DESIGN_DIR}/CompetitionSeason.lua ${PRO_DESIGN_DIR}/PVP
+
+cp -R -f ${SVN_DESIGN_DIR}/Language.lua ${PRO_LANGUAGE_DIR}
+cp -R -f ${SVN_DESIGN_DIR}/loading.lua ${PRO_DESIGN_DIR}/COMMON
+
+cp -R -f ${SVN_DESIGN_DIR}/MapInfo.lua ${PROJECT_DIR}/Assets/src/DATA
+
+
+echo "SUCCESS"
