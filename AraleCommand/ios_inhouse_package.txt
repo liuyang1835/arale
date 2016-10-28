@@ -1,0 +1,67 @@
+export STR_DATETIME=$(date +%Y%m%d-%H%M%S)
+export DIR_IPA_ROOT="/Users/liuyang/SVN/AralePublishPackage/Arale_iOS"
+export DIR_IPA_DATE="${DIR_IPA_ROOT}/${STR_DATETIME}"
+export FULL_PATH_IPA="${DIR_IPA_DATE}/Arale_Enterprise_${STR_DATETIME}.ipa"
+export PROJECT_DIR="/Users/liuyang/SVN/AralePublishPackage/new_trunk"
+export LUA_TOOL_PATH="${PROJECT_DIR}/JJFlyTools/EasyLuaEncryptor/EasyLuaEncryptor"
+export PLIST_BUDDY="/usr/libexec/PlistBuddy"
+export RES_PVR_ENCODE_DIR="/Users/liuyang/SVN/Arale/AraleArtResource/trunk/SHEET_RES/SHEET_PVR_ENCODE"
+
+
+echo "更新工程目录。。。"
+#暂时用本地工程代替
+rm -rf ${PROJECT_DIR}/Assets
+cp -R -f /Users/liuyang/SVN/NewArale/Classes ${PROJECT_DIR}
+cp -R -f /Users/liuyang/SVN/NewArale/Assets ${PROJECT_DIR}
+cp -R -f /Users/liuyang/SVN/NewArale/Targets/proj.ios_mac ${PROJECT_DIR}/Targets
+
+
+#ORI_PROJECT_DIR=""
+
+cd ${PROJECT_DIR}
+#svn revert ./ -R
+#svn update --force
+
+echo "编译lua脚本。。。"
+${LUA_TOOL_PATH} -key tunfennanhai -sign CaoNiMa ./Assets/src/
+
+echo "创建输出目录。。。"
+if [ -d ${DIR_IPA_ROOT} ]; then
+	echo "DIR_IPA_ROOT 目录已存在。"
+else
+	mkdir ${DIR_IPA_ROOT}
+fi
+
+echo "解锁钥匙串..."
+security unlock-keychain "-p" "123456" /Users/liuyang/Library/Keychains/Arale.keychain
+security unlock-keychain "-p" "123456" /Users/liuyang/Library/Keychains/ShangGame.keychain
+
+
+echo "修改info.plist"
+${PLIST_BUDDY} -c "Set :CFBundleShortVersionString ${bundleVersion}" /Users/liuyang/SVN/AralePublishPackage/new_trunk/Targets/proj.ios_mac/iOS/Arale_iOS-Info.plist
+${PLIST_BUDDY} -c "Set :CFBundleVersion ${build}" "${PROJECT_DIR}/Targets/proj.ios_mac/iOS/Arale_iOS-Info.plist"
+
+echo "编译..."
+
+cd /Users/liuyang/SVN/AralePublishPackage/new_trunk/Targets/proj.ios_mac
+xcodebuild -target Arale_iOS clean
+xcodebuild -scheme Arale_iOS -configuration Release -derivedDataPath /Users/liuyang/Library/Developer/Xcode/DerivedData/Arale_iOS -archivePath /Users/liuyang/Library/Developer/Xcode/Archives/Arale_iOS
+
+
+echo "打包..."
+
+if [ -d ${DIR_IPA_DATE} ]; then
+	echo "DIR_IPA_DATE 目录已存在。"
+else
+	mkdir ${DIR_IPA_DATE}
+fi
+
+rm -rf /Users/liuyang/Library/Developer/Xcode/DerivedData/Arale_iOS/Build/Products/Release-iphoneos/Arale.app/_CodeSignature
+rm -rf /Users/liuyang/Library/Developer/Xcode/DerivedData/Arale_iOS/Build/Products/Release-iphoneos/Arale.app/embedded.mobileprovision
+cp -f ${PROJECT_DIR}/ProvisionsAndKeyStores/iOS_InHouse/ShangGameWildcard_InHouse.mobileprovision /Users/liuyang/Library/Developer/Xcode/DerivedData/Arale_iOS/Build/Products/Release-iphoneos/Arale.app/embedded.mobileprovision
+
+codesign -f -s "iPhone Distribution: Shang Game Co., Ltd." --entitlements=${PROJECT_DIR}/ProvisionsAndKeyStores/iOS_InHouse/archived-expanded-entitlements.xcent /Users/liuyang/Library/Developer/Xcode/DerivedData/Arale_iOS/Build/Products/Release-iphoneos/Arale.app
+
+xcrun -sdk iphoneos PackageApplication /Users/liuyang/Library/Developer/Xcode/DerivedData/Arale_iOS/Build/Products/Release-iphoneos/Arale.app -o ${FULL_PATH_IPA}
+
+echo "完成！！"

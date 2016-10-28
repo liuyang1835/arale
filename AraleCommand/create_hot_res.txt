@@ -1,0 +1,41 @@
+export HOT_ROOT_DIR="/Users/liuyang/SVN/NewArale/JJFlyTools/CocosAssetsManagerExTool/${channel}"
+export HOT_VS_DIR="${HOT_ROOT_DIR}/${version}"
+export PROJECT_DIR="/Users/liuyang/SVN/NewArale"
+#export HOT_URL="http://d3d6yx00la720i.cloudfront.net/${channel}/"
+export HOT_URL="http://1006082.1251160546.cdn.myqcloud.com/1251160546/1006082/${channel}/"
+export LUA_TOOL_PATH="${PROJECT_DIR}/JJFlyTools/EasyLuaEncryptor/EasyLuaEncryptor"
+
+echo "创建热更资源对应版本目录..."
+if [ -d ${HOT_VS_DIR} ]; then
+	rm -rf ${HOT_VS_DIR}
+fi
+
+if [ "${channel}" = "Dev" ]; then
+	export HOT_URL="http://d3d6yx00la720i.cloudfront.net/${channel}/"
+fi
+
+mkdir ${HOT_VS_DIR}
+mkdir ${HOT_VS_DIR}/res
+mkdir ${HOT_VS_DIR}/src
+
+echo "copy项目资源至热更目录下..."
+cp -R -f ${PROJECT_DIR}/Assets/res ${HOT_VS_DIR}
+cp -R -f ${PROJECT_DIR}/Assets/src/app ${HOT_VS_DIR}/src/app
+cp -R -f ${PROJECT_DIR}/Assets/src/Localization ${HOT_VS_DIR}/src/Localization
+cp -R -f ${PROJECT_DIR}/Assets/src/DATA ${HOT_VS_DIR}/src/DATA
+cp -R -f ${PROJECT_DIR}/Assets/src/DESIGN_CONFIG ${HOT_VS_DIR}/src/DESIGN_CONFIG
+
+echo "lua文件加密..."
+${LUA_TOOL_PATH} -key tunfennanhai -sign CaoNiMa ${HOT_VS_DIR}/src/
+
+if [ "${platform}" = "ANDROID" ]; then
+	echo "android 版本需转换为luac"
+    ${HOT_ROOT_DIR}/renameToLuac_param -v ${version}
+fi
+
+
+echo "生成manifest文件..."
+cd ${HOT_ROOT_DIR}
+${HOT_ROOT_DIR}/CocosAssetsManagerExTool -u ${HOT_URL} -v ${version}
+
+echo "完成！！"

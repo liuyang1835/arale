@@ -1,0 +1,21 @@
+export RES_ROOT_DIR="/Users/liuyang/SVN/Arale/AraleArtResource/trunk"
+export RES_ORI_DIR="/Users/liuyang/SVN/Arale/AraleArtResource/trunk/Packed"
+export RES_TARGET_DIR="/Users/liuyang/SVN/Arale/AraleArtResource/trunk/SHEET_RES"
+
+echo "更新原始资源目录..."
+
+cd ${RES_ORI_DIR}
+#svn revert ./ -R
+#svn revert ./CocosProject/cocosstudio/images/ -R
+svn update --force
+
+echo "执行打包..."
+cd ${RES_ROOT_DIR}
+${RES_ROOT_DIR}/packAll
+
+echo "提交更新。。。"
+cd ${RES_TARGET_DIR}
+svn add * --force
+svn commit -m "Auto TP package!!"
+
+echo "完成！"
